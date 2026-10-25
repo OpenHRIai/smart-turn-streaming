@@ -11,15 +11,17 @@
 <text x="300" y="88" font-size="10" fill="#333">70 % at 1.0–1.2 s and 30 % at 3.8–4.2 s (the backstop): fast or late, nothing in between</text>
 <line x1="300" y1="142" x2="900" y2="142" stroke="#ddd"/>
 <rect x="301.0" y="114.9" width="31.3" height="27.1" rx="2" fill="#E69F00"/>
-<text x="316.7" y="110.9" font-size="9.5" fill="#444" text-anchor="middle">41 %</text>
+<text x="316.7" y="110.9" font-size="9" fill="#444" text-anchor="middle">41 %</text>
 <rect x="334.3" y="123.9" width="31.3" height="18.1" rx="2" fill="#E69F00"/>
-<text x="350.0" y="119.9" font-size="9.5" fill="#444" text-anchor="middle">28 %</text>
-<rect x="367.7" y="141.2" width="31.3" height="0.8" rx="2" fill="#E69F00"/>
+<text x="350.0" y="119.9" font-size="9" fill="#444" text-anchor="middle">28 %</text>
+<rect x="367.7" y="140.5" width="31.3" height="1.5" rx="2" fill="#E69F00"/>
+<text x="383.3" y="136.5" font-size="9" fill="#444" text-anchor="middle">1 %</text>
 <rect x="801.0" y="128.9" width="31.3" height="13.1" rx="2" fill="#E69F00"/>
-<text x="816.7" y="124.9" font-size="9.5" fill="#444" text-anchor="middle">20 %</text>
+<text x="816.7" y="124.9" font-size="9" fill="#444" text-anchor="middle">20 %</text>
 <rect x="834.3" y="136.2" width="31.3" height="5.8" rx="2" fill="#E69F00"/>
-<text x="850.0" y="132.2" font-size="9.5" fill="#444" text-anchor="middle">9 %</text>
-<rect x="867.7" y="141.2" width="31.3" height="0.8" rx="2" fill="#E69F00"/>
+<text x="850.0" y="132.2" font-size="9" fill="#444" text-anchor="middle">9 %</text>
+<rect x="867.7" y="140.5" width="31.3" height="1.5" rx="2" fill="#E69F00"/>
+<text x="883.3" y="136.5" font-size="9" fill="#444" text-anchor="middle">1 %</text>
 <line x1="18" y1="166" x2="942" y2="166" stroke="#eee"/>
 <rect x="18" y="182" width="10" height="10" rx="2" fill="#0072B2"/>
 <text x="34" y="192" font-size="13" font-weight="bold" fill="#222">Smart Turn Streaming, two stages</text>
@@ -29,19 +31,25 @@
 <text x="300" y="200" font-size="10" fill="#333">68 % under 1.5 s (the answer is ready when the commit lands), 25 % at 2.0 s (no eager fired), 8 % on the backstop</text>
 <line x1="300" y1="254" x2="900" y2="254" stroke="#ddd"/>
 <rect x="301.0" y="246.6" width="31.3" height="7.4" rx="2" fill="#0072B2"/>
-<text x="316.7" y="242.6" font-size="9.5" fill="#444" text-anchor="middle">11 %</text>
+<text x="316.7" y="242.6" font-size="9" fill="#444" text-anchor="middle">11 %</text>
 <rect x="334.3" y="245.8" width="31.3" height="8.2" rx="2" fill="#0072B2"/>
-<text x="350.0" y="241.8" font-size="9.5" fill="#444" text-anchor="middle">12 %</text>
+<text x="350.0" y="241.8" font-size="9" fill="#444" text-anchor="middle">12 %</text>
 <rect x="367.7" y="226.1" width="31.3" height="27.9" rx="2" fill="#0072B2"/>
-<text x="383.3" y="222.1" font-size="9.5" fill="#444" text-anchor="middle">42 %</text>
+<text x="383.3" y="222.1" font-size="9" fill="#444" text-anchor="middle">42 %</text>
 <rect x="401.0" y="252.4" width="31.3" height="1.6" rx="2" fill="#0072B2"/>
+<text x="416.7" y="248.4" font-size="9" fill="#444" text-anchor="middle">2 %</text>
 <rect x="467.7" y="243.3" width="31.3" height="10.7" rx="2" fill="#0072B2"/>
-<text x="483.3" y="239.3" font-size="9.5" fill="#444" text-anchor="middle">16 %</text>
+<text x="483.3" y="239.3" font-size="9" fill="#444" text-anchor="middle">16 %</text>
 <rect x="501.0" y="249.1" width="31.3" height="4.9" rx="2" fill="#0072B2"/>
+<text x="516.7" y="245.1" font-size="9" fill="#444" text-anchor="middle">8 %</text>
 <rect x="634.3" y="252.4" width="31.3" height="1.6" rx="2" fill="#0072B2"/>
+<text x="650.0" y="248.4" font-size="9" fill="#444" text-anchor="middle">2 %</text>
 <rect x="667.7" y="252.4" width="31.3" height="1.6" rx="2" fill="#0072B2"/>
-<rect x="767.7" y="253.2" width="31.3" height="0.8" rx="2" fill="#0072B2"/>
-<rect x="834.3" y="253.2" width="31.3" height="0.8" rx="2" fill="#0072B2"/>
+<text x="683.3" y="248.4" font-size="9" fill="#444" text-anchor="middle">2 %</text>
+<rect x="767.7" y="252.5" width="31.3" height="1.5" rx="2" fill="#0072B2"/>
+<text x="783.3" y="248.5" font-size="9" fill="#444" text-anchor="middle">1 %</text>
+<rect x="834.3" y="252.5" width="31.3" height="1.5" rx="2" fill="#0072B2"/>
+<text x="850.0" y="248.5" font-size="9" fill="#444" text-anchor="middle">1 %</text>
 <line x1="300" y1="284" x2="900" y2="284" stroke="#333"/>
 <line x1="333.3" y1="284" x2="333.3" y2="290" stroke="#333"/><text x="333.3" y="302" font-size="10" fill="#333" text-anchor="middle">1 s</text>
 <line x1="500.0" y1="284" x2="500.0" y2="290" stroke="#333"/><text x="500.0" y="302" font-size="10" fill="#333" text-anchor="middle">2 s</text>
