@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smart-turn-streaming"
+version = "0.1.0"
+description = "Silence-aware streaming end-of-turn detection for voice agents, on Pipecat's frozen Smart Turn v3.2 encoder (CPU, numpy + onnxruntime)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Maxim Makatchev" }]
+keywords = ["turn-detection", "end-of-turn", "voice-agents", "pipecat", "streaming", "onnx"]
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = [
+    "numpy",
+    "onnxruntime",
+    "huggingface_hub",
+]
+
+[project.optional-dependencies]
+# the Pipecat turn analyzer and the eager stop strategy (eot/pipecat_analyzer.py, eot/pipecat_eager_strategy.py)
+pipecat = ["pipecat-ai[silero]>=1.14"]
+# offline evaluation and the replay harness (release/eval/ami_eval.py, scripts/b2_validate.py, scripts/b3_replay.py)
+eval = ["soundfile", "pandas", "pyarrow", "scikit-learn"]
+# training the heads (scripts/b1_*.py, eot/model.py) and the AMI build (scripts/a2_*.py)
+train = ["torch", "torchaudio", "transformers", "silero-vad", "matplotlib", "onnx"]
+dev = ["pytest", "transformers", "soundfile", "scikit-learn", "pandas"]
+
+[project.urls]
+Homepage = "https://github.com/OpenHRIai/smart-turn-streaming"
+Models = "https://huggingface.co/OpenHRI/smart-turn-streaming"
+
+[tool.setuptools]
+packages = ["eot"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

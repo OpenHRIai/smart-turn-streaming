@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Helvetica, Arial, sans-serif">
+  <style>text { paint-order: stroke; stroke: #ffffff; stroke-width: 3px; stroke-linejoin: round; }</style>
+  <rect width="960" height="560" fill="#ffffff"/>
+
+  <text x="18" y="24" font-size="15" font-weight="bold" fill="#222">Two-stage streaming rule vs stock Smart Turn v3.2</text>
+  <text x="18" y="40" font-size="11" fill="#555">80 turn ends + 80 mid-turn pauses from AMI meetings, replayed in Pipecat; LLM response latency L = 0.8 s. Lower is better in every row.</text>
+
+  <!-- legend -->
+  <circle cx="24" cy="62" r="6" fill="#8a8a8a"/>
+  <text x="36" y="66" font-size="11" fill="#333">stock Smart Turn v3.2</text>
+  <circle cx="190" cy="62" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/>
+  <text x="202" y="66" font-size="11" fill="#333">streaming, one stage (far15)</text>
+  <circle cx="390" cy="62" r="6" fill="#1b6f5f"/>
+  <text x="402" y="66" font-size="11" fill="#333">streaming, two stages (far15 commit + 30 % eager table)</text>
+  <rect x="770" y="57" width="26" height="10" rx="5" fill="#9fd3b3"/><text x="800" y="66" font-size="11" fill="#333">win</text>
+  <rect x="836" y="57" width="26" height="10" rx="5" fill="#f1b3b3"/><text x="866" y="66" font-size="11" fill="#333">cost</text>
+
+  <!-- ===== wins ===== -->
+  <text x="18" y="92" font-size="12" font-weight="bold" fill="#1e7a46">WINS</text>
+  <line x1="60" y1="88" x2="942" y2="88" stroke="#e3f4e9" stroke-width="2"/>
+
+  <!-- row 1: turn splits -->
+  <text x="18" y="114" font-size="12" fill="#222">Pauses mistaken for a turn end (turn split)</text>
+  <line x1="330" y1="110" x2="810" y2="110" stroke="#eee"/>
+  <rect x="378" y="107" width="360" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="738" cy="110" r="7" fill="#8a8a8a"/><text x="738" y="98" font-size="10" fill="#777" text-anchor="middle">42.5 %</text>
+  <circle cx="378" cy="110" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="378" y="130" font-size="9.5" fill="#4a9a8a" text-anchor="middle">5.0 %</text>
+  <circle cx="378" cy="110" r="7" fill="#1b6f5f"/><text x="378" y="98" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">5.0 %</text>
+  <rect x="850" y="99" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="114" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−37.5 pts</text>
+
+  <!-- row 2: audible -->
+  <text x="18" y="158" font-size="12" fill="#222">Bot heard talking over the user</text>
+  <line x1="330" y1="154" x2="810" y2="154" stroke="#eee"/>
+  <rect x="450" y="151" width="240" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="690" cy="154" r="7" fill="#8a8a8a"/><text x="690" y="142" font-size="10" fill="#777" text-anchor="middle">7.5 %</text>
+  <circle cx="388" cy="154" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="388" y="174" font-size="9.5" fill="#4a9a8a" text-anchor="middle">1.2 %</text>
+  <circle cx="450" cy="154" r="7" fill="#1b6f5f"/><text x="450" y="142" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">2.5 %</text>
+  <rect x="850" y="143" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="158" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−5.0 pts</text>
+
+  <!-- row 3: wasted generations -->
+  <text x="18" y="202" font-size="12" fill="#222">LLM calls spent on pauses</text>
+  <line x1="330" y1="198" x2="810" y2="198" stroke="#eee"/>
+  <rect x="510" y="195" width="228" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="738" cy="198" r="7" fill="#8a8a8a"/><text x="738" y="186" font-size="10" fill="#777" text-anchor="middle">42.5 %</text>
+  <circle cx="378" cy="198" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="378" y="218" font-size="9.5" fill="#4a9a8a" text-anchor="middle">5.0 %</text>
+  <circle cx="510" cy="198" r="7" fill="#1b6f5f"/><text x="510" y="186" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">18.8 %</text>
+  <rect x="850" y="187" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="202" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−23.7 pts</text>
+
+  <!-- row 4: timeouts -->
+  <text x="18" y="246" font-size="12" fill="#222">Turn ends the model misses (3 s timeout)</text>
+  <line x1="330" y1="242" x2="810" y2="242" stroke="#eee"/>
+  <rect x="442" y="239" width="336" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="778" cy="242" r="7" fill="#8a8a8a"/><text x="778" y="230" font-size="10" fill="#777" text-anchor="middle">30 %</text>
+  <circle cx="442" cy="242" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="442" y="262" font-size="9.5" fill="#4a9a8a" text-anchor="middle">7 %</text>
+  <circle cx="442" cy="242" r="7" fill="#1b6f5f"/><text x="442" y="230" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">7 %</text>
+  <rect x="850" y="231" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="246" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−23 pts</text>
+
+  <!-- row 5: p90 -->
+  <text x="18" y="290" font-size="12" fill="#222">Response time, slowest 10 % of turn ends (p90)</text>
+  <line x1="330" y1="286" x2="810" y2="286" stroke="#eee"/>
+  <rect x="548" y="283" width="209" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="757" cy="286" r="7" fill="#8a8a8a"/><text x="757" y="274" font-size="10" fill="#777" text-anchor="middle">4.00 s</text>
+  <circle cx="551" cy="286" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="551" y="306" font-size="9.5" fill="#4a9a8a" text-anchor="middle">2.07 s</text>
+  <circle cx="548" cy="286" r="7" fill="#1b6f5f"/><text x="548" y="274" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">2.04 s</text>
+  <rect x="850" y="275" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="290" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−1.96 s</text>
+
+  <!-- row 6: mean -->
+  <text x="18" y="334" font-size="12" fill="#222">Response time, mean</text>
+  <line x1="330" y1="330" x2="810" y2="330" stroke="#eee"/>
+  <rect x="628" y="327" width="65" height="6" rx="3" fill="#9fd3b3"/>
+  <circle cx="693" cy="330" r="7" fill="#8a8a8a"/><text x="693" y="318" font-size="10" fill="#777" text-anchor="middle">1.89 s</text>
+  <circle cx="699" cy="330" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="699" y="350" font-size="9.5" fill="#4a9a8a" text-anchor="middle">1.92 s</text>
+  <circle cx="628" cy="330" r="7" fill="#1b6f5f"/><text x="628" y="318" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">1.55 s</text>
+  <rect x="850" y="319" width="92" height="22" rx="11" fill="#e3f4e9"/><text x="896" y="334" font-size="11" font-weight="bold" fill="#1e7a46" text-anchor="middle">−0.34 s</text>
+
+  <!-- ===== costs ===== -->
+  <text x="18" y="378" font-size="12" font-weight="bold" fill="#b23a3a">COSTS</text>
+  <line x1="68" y1="374" x2="942" y2="374" stroke="#fbe3e3" stroke-width="2"/>
+
+  <!-- row 7: p50 -->
+  <text x="18" y="400" font-size="12" fill="#222">Response time, typical turn end (median)</text>
+  <line x1="330" y1="396" x2="810" y2="396" stroke="#eee"/>
+  <rect x="528" y="393" width="54" height="6" rx="3" fill="#f1b3b3"/>
+  <circle cx="528" cy="396" r="7" fill="#8a8a8a"/><text x="528" y="384" font-size="10" fill="#777" text-anchor="middle">1.03 s</text>
+  <circle cx="712" cy="396" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="712" y="416" font-size="9.5" fill="#4a9a8a" text-anchor="middle">1.99 s</text>
+  <circle cx="582" cy="396" r="7" fill="#1b6f5f"/><text x="582" y="384" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">1.31 s</text>
+  <rect x="850" y="385" width="92" height="22" rx="11" fill="#fbe3e3"/><text x="896" y="400" font-size="11" font-weight="bold" fill="#b23a3a" text-anchor="middle">+0.28 s</text>
+
+  <!-- row 8: CPU -->
+  <text x="18" y="444" font-size="12" fill="#222">CPU, share of one M4 core (whole process)</text>
+  <line x1="330" y1="440" x2="810" y2="440" stroke="#eee"/>
+  <rect x="503" y="437" width="153" height="6" rx="3" fill="#f1b3b3"/>
+  <circle cx="503" cy="440" r="7" fill="#8a8a8a"/><text x="503" y="428" font-size="10" fill="#777" text-anchor="middle">9 %</text>
+  <circle cx="656" cy="440" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="656" y="460" font-size="9.5" fill="#4a9a8a" text-anchor="middle">17 %</text>
+  <circle cx="656" cy="440" r="7" fill="#1b6f5f"/><text x="656" y="428" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">17 %</text>
+  <rect x="850" y="429" width="92" height="22" rx="11" fill="#fbe3e3"/><text x="896" y="444" font-size="11" font-weight="bold" fill="#b23a3a" text-anchor="middle">+8 pts</text>
+
+  <!-- row 9: memory -->
+  <text x="18" y="488" font-size="12" fill="#222">Memory added by the analyzer</text>
+  <line x1="330" y1="484" x2="810" y2="484" stroke="#eee"/>
+  <rect x="573" y="481" width="122" height="6" rx="3" fill="#f1b3b3"/>
+  <circle cx="573" cy="484" r="7" fill="#8a8a8a"/><text x="573" y="472" font-size="10" fill="#777" text-anchor="middle">76 MB</text>
+  <circle cx="695" cy="484" r="4.5" fill="#fff" stroke="#4a9a8a" stroke-width="2"/><text x="695" y="504" font-size="9.5" fill="#4a9a8a" text-anchor="middle">114 MB</text>
+  <circle cx="695" cy="484" r="7" fill="#1b6f5f"/><text x="695" y="472" font-size="10.5" font-weight="bold" fill="#1b6f5f" text-anchor="middle">114 MB</text>
+  <rect x="850" y="473" width="92" height="22" rx="11" fill="#fbe3e3"/><text x="896" y="488" font-size="11" font-weight="bold" fill="#b23a3a" text-anchor="middle">+38 MB</text>
+
+  <text x="18" y="534" font-size="10" fill="#777">Each row has its own scale. Rates are per pause or per turn end; CPU and memory from the C2 worker-thread analyzer against pipecat's Smart Turn analyzer, both measured in the same replay harness.</text>
+</svg>

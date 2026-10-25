@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="550" viewBox="0 0 960 550" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#fde7bf"/>
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#e8a33a" stroke-width="2"/>
+    </pattern>
+  </defs>
+    <style>text { paint-order: stroke; stroke: #ffffff; stroke-width: 3px; stroke-linejoin: round; }</style>
+  <rect width="960" height="550" fill="#ffffff"/>
+
+  <!-- title -->
+  <text x="18" y="22" font-size="15" font-weight="bold" fill="#222">One mid-turn pause of 1.4 s, three end-of-turn rules</text>
+  <text x="18" y="37" font-size="11" fill="#555">The user stops at 0 s to think and resumes at 1.4 s; the VAD reports it 0.2 s later. L = 0.8 s. Rates at left: 80 AMI pauses replayed in Pipecat.</text>
+
+  <!-- time grid -->
+  <line x1="360" y1="64" x2="360" y2="452" stroke="#999" stroke-width="1"/>
+  <text x="356" y="50" font-size="10" fill="#666" text-anchor="end">last word</text>
+  <line x1="386" y1="64" x2="386" y2="452" stroke="#ccc" stroke-dasharray="2 3"/>
+  <text x="386" y="61" font-size="10" fill="#666" text-anchor="middle">VAD stop 0.2 s</text>
+  <line x1="425" y1="64" x2="425" y2="452" stroke="#ccc" stroke-dasharray="2 3"/>
+  <text x="425" y="50" font-size="10" fill="#666" text-anchor="middle">0.5 s</text>
+  <line x1="516" y1="64" x2="516" y2="452" stroke="#ccc" stroke-dasharray="2 3"/>
+  <text x="512" y="61" font-size="10" fill="#666" text-anchor="end">1.2 s</text>
+  <line x1="542" y1="64" x2="542" y2="452" stroke="#999" stroke-width="1"/>
+  <text x="542" y="50" font-size="10" fill="#666" text-anchor="middle">user resumes 1.4 s</text>
+  <line x1="568" y1="64" x2="568" y2="452" stroke="#d64545" stroke-dasharray="4 3"/>
+  <text x="572" y="61" font-size="10" fill="#b23a3a">VAD start 1.6 s</text>
+
+  <!-- ===== lane 0: stock ===== -->
+  <text x="18" y="84" font-size="13" font-weight="bold" fill="#222">Stock Smart Turn v3.2</text>
+  <text x="18" y="99" font-size="11" fill="#555">one query at the VAD stop, θ 0.5</text>
+  <text x="18" y="124" font-size="10" fill="#777">generations / turn splits / audible</text>
+  <text x="18" y="138" font-size="12" font-weight="bold" fill="#222">42.5 / 42.5 / 7.5 % of pauses</text>
+  <text x="222" y="81" font-size="10" fill="#888" text-anchor="end">user</text>
+  <text x="222" y="109" font-size="10" fill="#888" text-anchor="end">detector</text>
+  <text x="222" y="137" font-size="10" fill="#888" text-anchor="end">LLM</text>
+  <text x="222" y="165" font-size="10" fill="#888" text-anchor="end">bot</text>
+
+  <rect x="230" y="71" width="130" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="236" y="82" font-size="10" fill="#333">user speaks</text>
+  <rect x="542" y="71" width="390" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="548" y="82" font-size="10" fill="#333">user continues the same turn</text>
+
+  <path d="M386,99 L393,106 L386,113 L379,106 Z" fill="#2b2b2b"/>
+  <text x="397" y="101" font-size="10" fill="#333">p ≥ 0.5 → commit: a false alarm, the turn is split in the context</text>
+
+  <rect x="386" y="127" width="104" height="14" rx="2" fill="#f2b134"/>
+  <text x="495" y="138" font-size="10" fill="#333">generate, 0.8 s</text>
+
+  <rect x="494" y="155" width="74" height="14" rx="2" fill="#4caf7d"/>
+  <path d="M563,157 L573,167 M573,157 L563,167" stroke="#d64545" stroke-width="2.5"/>
+  <text x="580" y="166" font-size="10" font-weight="bold" fill="#b23a3a">heard from 1.0 s, cut off at the VAD start (1.6 s)</text>
+
+  <line x1="18" y1="185" x2="942" y2="185" stroke="#e5e5e5"/>
+
+  <!-- ===== lane 1: one stage ===== -->
+  <text x="18" y="209" font-size="13" font-weight="bold" fill="#222">Streaming, one stage</text>
+  <text x="18" y="224" font-size="11" fill="#555">far15: re-query at 0.2 / 0.5 / 1.2 s</text>
+  <text x="18" y="249" font-size="10" fill="#777">generations / turn splits / audible</text>
+  <text x="18" y="263" font-size="12" font-weight="bold" fill="#222">5.0 / 5.0 / 1.2 % of pauses</text>
+  <text x="222" y="206" font-size="10" fill="#888" text-anchor="end">user</text>
+  <text x="222" y="234" font-size="10" fill="#888" text-anchor="end">detector</text>
+  <text x="222" y="262" font-size="10" fill="#888" text-anchor="end">LLM</text>
+  <text x="222" y="290" font-size="10" fill="#888" text-anchor="end">bot</text>
+
+  <rect x="230" y="196" width="130" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="236" y="207" font-size="10" fill="#333">user speaks</text>
+  <rect x="542" y="196" width="390" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="548" y="207" font-size="10" fill="#333">user continues the same turn</text>
+
+  <path d="M386,224 L393,231 L386,238 L379,231 Z" fill="#fff" stroke="#555" stroke-width="1.5"/>
+  <text x="386" y="248" font-size="9" fill="#555" text-anchor="middle">p &lt; 0.98</text>
+  <path d="M425,224 L432,231 L425,238 L418,231 Z" fill="#fff" stroke="#555" stroke-width="1.5"/>
+  <text x="425" y="220" font-size="9" fill="#555" text-anchor="middle">p &lt; 0.88</text>
+  <path d="M516,224 L523,231 L516,238 L509,231 Z" fill="#fff" stroke="#555" stroke-width="1.5"/>
+  <text x="516" y="248" font-size="9" fill="#555" text-anchor="middle">p &lt; 0.80</text>
+
+  <text x="580" y="263" font-size="10" font-style="italic" fill="#888">no decision passes: nothing generated, the turn stays whole</text>
+
+  <line x1="18" y1="310" x2="942" y2="310" stroke="#e5e5e5"/>
+
+  <!-- ===== lane 2: two stages ===== -->
+  <text x="18" y="334" font-size="13" font-weight="bold" fill="#222">Streaming, two stages</text>
+  <text x="18" y="349" font-size="11" fill="#555">far15 commit + eager table (30 %)</text>
+  <text x="18" y="374" font-size="10" fill="#777">generations / turn splits / audible</text>
+  <text x="18" y="388" font-size="12" font-weight="bold" fill="#222">18.8 / 5.0 / 2.5 % of pauses</text>
+  <text x="222" y="331" font-size="10" fill="#888" text-anchor="end">user</text>
+  <text x="222" y="359" font-size="10" fill="#888" text-anchor="end">detector</text>
+  <text x="222" y="387" font-size="10" fill="#888" text-anchor="end">LLM</text>
+  <text x="222" y="415" font-size="10" fill="#888" text-anchor="end">bot</text>
+
+  <rect x="230" y="321" width="130" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="236" y="332" font-size="10" fill="#333">user speaks</text>
+  <rect x="542" y="321" width="390" height="14" rx="2" fill="#b7c7d1"/>
+  <text x="548" y="332" font-size="10" fill="#333">user continues the same turn</text>
+
+  <path d="M386,349 L393,356 L386,363 L379,356 Z" fill="#fff" stroke="#555" stroke-width="1.5"/>
+  <text x="386" y="373" font-size="9" fill="#555" text-anchor="middle">p &lt; 0.98</text>
+  <path d="M425,349 L432,356 L425,363 L418,356 Z" fill="#fff" stroke="#e07b00" stroke-width="2.5"/>
+  <text x="434" y="345" font-size="10" fill="#c56a00">p ≥ θ_eager 0.56 → eager: start the LLM</text>
+  <path d="M516,349 L523,356 L516,363 L509,356 Z" fill="#fff" stroke="#555" stroke-width="1.5"/>
+  <text x="527" y="373" font-size="10" fill="#555">p &lt; θ_commit 0.80: no commit, the turn stays open</text>
+
+  <rect x="425" y="377" width="104" height="14" rx="2" fill="url(#hatch)" stroke="#e07b00" stroke-width="1.2" stroke-dasharray="4 2"/>
+  <path d="M563,379 L573,389 M573,379 L563,389" stroke="#d64545" stroke-width="2.5"/>
+  <text x="580" y="388" font-size="10" font-weight="bold" fill="#b23a3a">EagerEndOfTurnCancelFrame: the held response is discarded</text>
+
+  <text x="580" y="416" font-size="10" font-style="italic" fill="#555">nothing heard, the turn is not split; one generation spent</text>
+
+  <!-- axis -->
+  <line x1="230" y1="452" x2="932" y2="452" stroke="#333"/>
+  <g font-size="10" fill="#333" text-anchor="middle">
+    <line x1="230" y1="452" x2="230" y2="458" stroke="#333"/><text x="230" y="470">−1</text>
+    <line x1="360" y1="452" x2="360" y2="458" stroke="#333"/><text x="360" y="470">0</text>
+    <line x1="490" y1="452" x2="490" y2="458" stroke="#333"/><text x="490" y="470">1</text>
+    <line x1="620" y1="452" x2="620" y2="458" stroke="#333"/><text x="620" y="470">2</text>
+    <line x1="750" y1="452" x2="750" y2="458" stroke="#333"/><text x="750" y="470">3</text>
+    <line x1="880" y1="452" x2="880" y2="458" stroke="#333"/><text x="880" y="470">4</text>
+    <text x="581" y="484" fill="#666">seconds after the user's last word</text>
+  </g>
+
+  <!-- caption -->
+  <text x="18" y="502" font-size="10.5" fill="#555">A stock false alarm costs a generation, splits the user's turn in the context, and is audible when the response lands before the user resumes.</text>
+  <text x="18" y="516" font-size="10.5" fill="#555">At L = 0.8 s that is 7.5 % of pauses, and 42.5 % are split. The two-stage rule spends a generation on 18.8 % of pauses (stock 42.5 %)</text>
+  <text x="18" y="530" font-size="10.5" fill="#555">and keeps the one-stage rule's 5 % splits. Its audible rate rises from 1.2 to 2.5 %: a held response is ready the moment a wrong commit lands.</text>
+</svg>
