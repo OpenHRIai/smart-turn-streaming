@@ -3,8 +3,8 @@
 ## This release
 
 The trained heads (`eot-heads-v32.onnx`), the decision-rule tables (`rules/`), the evaluation
-script and manifests (`eval/`) and the model card are released by susuROBO under the BSD 2-Clause
-License (`LICENSE`).
+script and manifests (`eval/`) and the model card are released by the OpenHRI project under the BSD 2-Clause
+License (`LICENSE`), copyright Maxim Makatchev.
 
 ## Encoder: Smart Turn v3.2 (Daily / Pipecat)
 
