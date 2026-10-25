@@ -53,9 +53,13 @@ def main():
     ap.add_argument("--stage-dir", default=str(ROOT / "build/hf_stage"))
     ap.add_argument("--encoder", default=str(ROOT / "data/models/smart-turn-v3.2-gpu.pooled.onnx"))
     ap.add_argument("--heads", default=str(ROOT / "data/models/eot_heads_v32.onnx"))
+    ap.add_argument("--clipend", default=str(ROOT / "data/models/smart-turn-streaming-clipend.onnx"),
+                    help="the fused, calibrated clip-end graph (scripts/c3_fuse_onnx.py); '' to skip")
     a = ap.parse_args()
     FILES["smart-turn-v3.2-encoder-pooled.onnx"] = Path(a.encoder)
     FILES["eot-heads-v32.onnx"] = Path(a.heads)
+    if a.clipend:
+        FILES["smart-turn-streaming-clipend.onnx"] = Path(a.clipend)
     stage = Path(a.stage_dir) / a.repo_id.split("/")[-1]
     if stage.exists():
         shutil.rmtree(stage)

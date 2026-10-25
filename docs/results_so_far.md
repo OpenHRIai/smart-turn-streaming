@@ -16,7 +16,9 @@ Plan and gates: `plan_online_eot.md`. Architecture proposal: `design_streaming_e
 | R2: Seamless dev split, NC model, AV oracle | done 2026-10-24, merged | `r2_seamless.md` |
 | C1: two-stage eager-then-commit rule on Pipecat's speculation path | done 2026-10-24 | `c1_eager.md` |
 | C2: encoder refresh on a worker thread, R1 release files staged | done 2026-10-25 | `c2_release.md` |
-| C2 upstream Pipecat PR (`pop_eager()` + eager strategy) | in progress, separate session | – |
+| C2 upstream Pipecat PR (`pop_eager()` + eager strategy) | on the fork branch `maxipesfix/pipecat:turn-analyzer-eager-stop-strategy`; upstream PR #6374 opened and closed, reopening is the user's call | – |
+| C3: official Smart Turn benchmark, calibration, per-language behaviour | done 2026-10-25 | `c3_benchmark.md` |
+| R1 release: `smart-turn-streaming` | released 2026-10-25: code at github.com/OpenHRIai/smart-turn-streaming (fresh repo, not a fork; encoder pinned in `UPSTREAM.md`), models at huggingface.co/OpenHRI/smart-turn-streaming | `c2_release.md`, figures in `figures/` |
 | R3: video from company recordings | later | – |
 
 Data: Modal volume `smart-turn-v2` (pipecat parquet shards, AMI annotations and 682 headsets,
@@ -95,6 +97,15 @@ computed 60 ms earlier would cost up to 0.035 AUC at 1.2 s, and a free-running h
 offset (it can precede the grid hop on the previous vector). At real-time pace on an idle laptop the encoder costs 46 ms, not 22 ms (power management),
 which is why a one-frame wait at the VAD stop misses it. Release R1 is staged (two ONNX files, model card, rule
 tables, AMI evaluation script that reproduces B1 within 0.004 AUC, CC BY 4.0 attribution); not uploaded.
+
+**C3, the official benchmark and languages.** On pipecat's own `benchmark.py` (full smart-turn-data v3.2
+test, 31,527 clips, threshold 0.5) the heads, Platt-calibrated on the training split and fused into one
+graph with the stock interface, score 93.2 % accuracy against Smart Turn v3.2's 93.7 % (FPR 4.2 vs
+3.5 %), same ranking (AUC 0.975 vs 0.978), same per-language pattern within noise. The benchmark has no
+pauses, so it is the regression guard, not the result. Per language on τ-padded clips the silence
+awareness transfers to all 23 languages: at a matched 5 % false-alarm rate at the clip end, false alarms
+after 2.5 s of silence are 9.4 % for the heads against 22.5 % for the frozen model, lower in every
+language. What is still English-only is the conversational hazard (a pause that resumes).
 
 ## What we learned
 

@@ -271,3 +271,14 @@ under $300 unless the encoder fine-tune is needed.
   within 0.001 (gate met); burst on the pipeline task 45 → 4–5 ms p99, CPU share and decisions unchanged.
   R1 staged in `runs/c2/hf_stage/`; the release evaluation script reproduces B1 from public AMI audio. Next: the
   user's call on the Hub repository name, the upload and the public-fork push; the upstream PR session.
+- 2026-10-25: R1 released. `smart-turn-streaming` is a fresh repository (not a fork of pipecat-ai/smart-turn: the
+  dependency is the encoder file, pinned by Hub revision and sha256 in its `UPSTREAM.md`; `git subtree` kept as the
+  option if upstream code is ever needed). Code: github.com/OpenHRIai/smart-turn-streaming (66 files: `eot/`,
+  scripts, tests, docs with the C1 figures, release sources); models and card: huggingface.co/OpenHRI/smart-turn-streaming
+  (`smart-turn-v3.2-encoder-pooled.onnx`, `eot-heads-v32.onnx`, rule tables, AMI evaluation script). The private repo
+  stays the training-side fork with `upstream`; R2 (Seamless NC) and R3 (video) continue here.
+- 2026-10-25: C3 done (`docs/c3_benchmark.md`). Pipecat's official `benchmark.py` run as the regression guard on a fused,
+  Platt-calibrated clip-end graph: 93.2 % vs v3.2's 93.7 % at threshold 0.5 on 31,527 clips, same ranking and per-language
+  pattern; the fused graph ships on the Hub as a drop-in. Per-language τ-padded analysis: silence awareness transfers to all
+  23 languages (FAR after 2.5 s of silence 9.4 % vs 22.5 % at matched 5 % at the clip end). Conversational evaluation stays
+  English-only until a non-English dialogue corpus (research-licensed, or R3 recordings) is available.

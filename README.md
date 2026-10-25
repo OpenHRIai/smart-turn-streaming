@@ -119,15 +119,24 @@ Pipecat, end to end, 80 + 80 AMI silences, L = 0.8 s:
 | streaming, two stages (`far15` + `far15_gen30`) | 5.0 % | 18.8 % | 2.5 % | 1.31 / 2.04 / 1.55 s |
 
 On pipecat's own `smart-turn-data-v3.2` test set the heads match the frozen model (AUC 0.976 vs 0.976
-at the acoustic offset) and improve on it after silence (0.965 vs 0.955 at 2.5 s).
+at the acoustic offset) and improve on it after silence (0.965 vs 0.955 at 2.5 s). On pipecat's official
+`benchmark.py` (full test set, 31,527 clips, threshold 0.5) the calibrated clip-end graph scores 93.2 %
+accuracy against Smart Turn v3.2's 93.7 %, same ranking and per-language pattern; that benchmark has no
+pauses, so it is the regression guard, not the result ([docs/c3_benchmark.md](docs/c3_benchmark.md)).
+
+Where the time goes, stock against the two-stage rule, on the same 80 turn ends:
+
+![Response-time distributions](docs/figures/response_time_distribution.svg)
 
 ## Limitations
 
 - **Conversational evaluation is English-only.** The silence-aware behaviour was trained and measured
   on English meetings (AMI); the per-language check covers 23 languages but only on isolated
   utterances (`smart-turn-data`), where the heads stay within noise of the frozen model in every
-  language. Whether the pause thresholds transfer to other languages' conversational timing is not
-  measured.
+  language and hold the decision through silence after an unfinished utterance in all 23 (false alarms
+  after 2.5 s of silence 9.4 % against the frozen model's 22.5 % at a matched 5 % at the clip end).
+  Whether the pause thresholds transfer to other languages' conversational timing, a pause that
+  resumes, is not measured.
 - Meetings set a ceiling: ending every turn at 1.2 s of silence gives recall 1.0 at 18 % false
   alarms, and below that budget about a quarter of turn ends wait for the backstop, for every model.
 - Long pauses (≥ 1.5 s) remain the weak spot: 50–60 % false alarms at the 10–15 % budgets.
@@ -145,7 +154,7 @@ at the acoustic offset) and improve on it after silence (0.965 vs 0.955 at 2.5 s
 | `eot/pipecat_eager_strategy.py` | `TurnAnalyzerEagerUserTurnStopStrategy`, the speculation-path stop strategy |
 | `eot/hub.py` | model download |
 | `eot/{windows,turn_rules,ami,features,model,rules_eval}.py` | data windows, end-of-turn labelling rules, AMI reader, pooled-vector export, heads, rule fitting |
-| `scripts/` | the experiment ladder: AMI build (`a2_*`), items and training (`b1_*`), fidelity and cost (`b2_validate.py`), Pipecat replay (`b3_replay.py`), eager sweep (`c1_eager_sweep.py`) |
+| `scripts/` | the experiment ladder: AMI build (`a2_*`), items and training (`b1_*`), fidelity and cost (`b2_validate.py`), Pipecat replay (`b3_replay.py`), eager sweep (`c1_eager_sweep.py`), calibration, fused clip-end export and pipecat's official benchmark (`c3_*`, `vendor/pipecat_benchmark.py`) |
 | `release/` | Hub model card, rule tables, the self-contained AMI evaluation script and manifests, `stage.py` |
 | `docs/` | plan, results and one document per stage; `docs/figures/` the figures above |
 | `tests/` | 40 tests (`pip install -e ".[pipecat,dev]" && pytest -q`) |

@@ -43,6 +43,7 @@ Code (Pipecat 1.14 turn analyzer, eager-then-commit stop strategy, training and 
 |---|---|---|
 | `smart-turn-v3.2-encoder-pooled.onnx` | 31 MB | Pipecat's Smart Turn v3.2 (Whisper-tiny encoder + its classifier), weights unchanged, with the pooled 384-d vector exposed as a second output. Input `input_features` (1, 80, 800) Whisper log-mel of the last 8 s; outputs `logits` (the stock model's P(complete)) and `sum_1` (the pooled vector). |
 | `eot-heads-v32.onnx` | 0.7 MB | The trained heads: LayerNorm + Linear on the pooled vector, a GRU over the last second of log-mel (20 × 80 at 50 ms), the silence length, a fusion MLP. Inputs `pooled` (1, 384), `mel20` (1, 20, 80), `tau_feat` (1, 3) = [τ / 2.5, log1p(τ), speaking]; output `probs` (1, 2) = [P(turn complete), P(turn ends within 0.4 s)]. 172k parameters. |
+| `smart-turn-streaming-clipend.onnx` | 33 MB | Drop-in with the stock interface: the pooled encoder, the heads at τ = 0 and a Platt calibration fitted on the training split in one graph, `input_features` (B, 80, 800) → `probability` (B, 1). For pipecat's `benchmark.py` and for callers that ask once at the clip end; the streaming rules use the two files above. |
 | `rules/theta_tables.csv` | | Commit thresholds θ(0.2 s), θ(0.5 s), θ(1.2 s) fitted on AMI dev at false-alarm budgets of 5 / 10 / 15 %, with their AMI test numbers. |
 | `rules/eager_tables.csv` | | Eager thresholds for Pipecat's speculation path, fitted on AMI dev at budgets of LLM generations spent on pauses (20–50 %). |
 | `eval/ami_eval.py`, `eval/ami_{dev,test}.csv`, `eval/ami_eval_reference.md` | | Reproduces the AMI tables below from the public corpus audio (numpy, onnxruntime, soundfile); the reference file is its output on 2026-10-25. |
@@ -100,6 +101,20 @@ charged the 3 s timeout:
 | re-query, 15 % budget, frozen v3.2 | 1.00 / 1.00 / 0.02 | 0.87 | 13.7 % | 1.44 s | 0.78 |
 | **re-query, 15 % budget, heads (`far15`)** | 0.98 / 0.88 / 0.80 | **0.86** | **13.3 %** | **1.21 s** | 0.61 |
 | no model: end every turn at 1.2 s of silence | – | 1.00 | 18.0 % | 1.20 s | 1.00 |
+
+### Pipecat's official benchmark (`benchmark.py`, full `smart-turn-data-v3.2` test, 31,527 clips, threshold 0.5, CPU)
+
+| model | accuracy | precision | recall | F1 | FPR | inference p50 |
+|---|---|---|---|---|---|---|
+| Smart Turn v3.2 (fp32) | **93.71 %** | 0.931 | 0.944 | 0.937 | 3.51 % | 10.2 ms |
+| `smart-turn-streaming-clipend.onnx` (heads, calibrated) | 93.23 % | 0.919 | 0.947 | 0.933 | 4.15 % | 10.3 ms |
+
+The regression guard, not the result: the benchmark has no pauses, so the re-query, the eager stage and the
+cancel path never run. At the clip end the calibrated heads trail v3.2 by 0.5 points at the fixed 0.5
+threshold (same ranking, AUC 0.975 vs 0.978; the residual is the operating point), with the same per-language
+pattern within noise (19 of 23 languages within 0.7 points; French, Polish and Turkish ahead; Arabic −1.6,
+Marathi −1.4, Norwegian −1.1 behind). Per-language tables and the method: `docs/c3_benchmark.md` in the code
+repository.
 
 ### Regression guard: `smart-turn-data-v3.2` test (6,000 clips, balanced)
 
@@ -196,7 +211,9 @@ p_end, p_eager = heads.run(None, {"pooled": pooled, "mel20": mel20, "tau_feat": 
 
 - **Conversational evaluation is English-only.** The silence-aware behaviour was trained and measured on
   English meetings (AMI); the per-language check covers 23 languages but only on isolated utterances
-  (`smart-turn-data`), where the heads stay within noise of the frozen model in every language. Whether
+  (`smart-turn-data`), where the heads stay within noise of the frozen model in every language and hold the decision through
+  silence after an unfinished utterance in all 23 (false alarms after 2.5 s of silence 9.4 % against the frozen
+  model's 22.5 % at a matched 5 % at the clip end). Whether
   the pause thresholds transfer to other languages' conversational timing is not measured.
 - Meetings have a ceiling set by the labels: ending every turn at 1.2 s of silence
   gives recall 1.0 at 18 % false alarms, and below that budget about a quarter of turn ends still

@@ -37,7 +37,9 @@ cancel   VAD reports speech       EagerEndOfTurnCancelFrame, response discarded
 
 Timelines of the three rules on one turn end and on one mid-turn pause: `figures/timeline_turn_end.svg`,
 `figures/timeline_pause.svg`; wins and costs against stock Smart Turn, one row per metric:
-`figures/wins_and_costs.svg`.
+`figures/wins_and_costs.svg`; the response-time distributions of stock and the two-stage rule on the 80
+replayed turn ends (stock is bimodal at 1 s and 4 s, the two-stage rule puts 92 % between 1 and 2 s):
+`figures/response_time_distribution.svg`.
 
 with θ_eager ≤ θ_commit. The response reaches the user at `max(t_commit, t_eager + L)` instead of
 `t_commit + L`. A false alarm is audible if that time comes before the speaker resumes, so the eager stage
