@@ -24,8 +24,9 @@ A silence-aware, streaming end-of-turn detector for voice agents, built on Pipec
 at the VAD stop followed by a 3 s timeout, it scores the conversation every 100 ms on the CPU and
 decides at 0.2 / 0.5 / 1.2 s of silence with thresholds fitted to a false-alarm budget. On real
 multi-party conversation (AMI Meeting Corpus) it ends the turn on 5 % of mid-turn pauses where the
-stock rule fires on 42 %, and brings the 90th-percentile response time from 3.2 s to 1.3 s. It runs
-at about 9 % of one Apple M4 core single-threaded, with numpy and onnxruntime only.
+stock rule fires on 42 %, and brings the 90th-percentile response time from 3.2 s to 1.3 s. A Pipecat
+process with it takes about 17 % of one Apple M4 core against 9 % with the stock analyzer (the detector
+alone is 9 % in a tight loop); numpy and onnxruntime only.
 
 Code (Pipecat 1.14 turn analyzer, eager-then-commit stop strategy, training and evaluation):
 [github.com/OpenHRIai/smart-turn-streaming](https://github.com/OpenHRIai/smart-turn-streaming).
