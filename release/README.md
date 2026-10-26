@@ -37,6 +37,8 @@ Code (Pipecat 1.14 turn analyzer, eager-then-commit stop strategy, training and 
 
 ![One mid-turn pause under the three rules](https://raw.githubusercontent.com/OpenHRIai/smart-turn-streaming/main/docs/figures/timeline_pause.png)
 
+![Response-time distributions, stock vs two stages](https://raw.githubusercontent.com/OpenHRIai/smart-turn-streaming/main/docs/figures/response_time_distribution.png)
+
 ## Files
 
 | file | size | what |
