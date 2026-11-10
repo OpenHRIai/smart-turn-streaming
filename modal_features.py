@@ -180,6 +180,72 @@ def featurize_ami(audio_paths: list[str], items_path: str = "data/b1/items.parqu
     return f"ami {tag}+{len(audio_paths) - 1}: {n} windows, {time.time() - t0:.0f} s, {prov[0]}"
 
 
+CANDOR = "/candor"
+candor_volume = modal.Volume.from_name("candor")
+CANDOR_OUT = f"{CANDOR}/eot_test/whisper"
+
+
+@app.function(image=image, gpu="L4", volumes={VOL: volume, CANDOR: candor_volume}, timeout=3 * 3600, memory=16384,
+              max_containers=8)
+def featurize_candor(convs: list[str], items_path: str = "eot_test/items.parquet") -> str:
+    """CANDOR test windows (scripts/candor_eot_items.py): Smart Turn's own p_v32 plus the heads' inputs, written to
+    the candor volume only (CANDOR licence: nothing derived leaves it)."""
+    import time
+    import numpy as np
+    import pandas as pd
+    import soundfile as sf
+    import torch
+    from transformers import WhisperFeatureExtractor
+    t0 = time.time()
+    items = pd.read_parquet(f"{CANDOR}/{items_path}")
+    items = items[items.conv.isin(convs)]
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    fe = WhisperFeatureExtractor(chunk_length=8)
+    sess, prov = _sessions()
+    rng = np.random.default_rng(0)
+    parts, wins, ids = [], [], []
+
+    def flush():
+        if wins:
+            out = _featurize(wins, fe, sess, device)
+            out["item_id"] = np.array(ids, dtype=np.int64)
+            parts.append(out)
+            wins.clear(); ids.clear()
+
+    for ap, g in items.groupby("audio"):
+        x, sr = sf.read(f"{CANDOR}/{ap}", dtype="float32", always_2d=False)
+        if x.ndim > 1:
+            x = x.mean(axis=1)
+        if sr != 16000:
+            import torchaudio
+            x = torchaudio.functional.resample(torch.from_numpy(x), sr, 16000).numpy()
+        for it in g.sort_values("end_s").itertuples(index=False):
+            wins.append(_cut(x, 16000, float(it.end_s), float(it.t_off), it.cut_s, rng))
+            ids.append(int(it.item_id))
+            if len(wins) >= BATCH:
+                flush()
+    flush()
+    n = _save(f"{CANDOR_OUT}/part_{convs[0][:8]}_{len(convs)}.npz", parts)
+    candor_volume.commit()
+    return f"candor {convs[0][:8]}+{len(convs) - 1}: {n} windows, {time.time() - t0:.0f} s, {prov[0]}"
+
+
+@app.function(image=image, volumes={CANDOR: candor_volume}, timeout=1800, memory=8192)
+def merge_candor(n_items: int, out_file: str = f"{CANDOR}/eot_test/whisper.npz") -> str:
+    import glob
+    import numpy as np
+    candor_volume.reload()
+    parts = [dict(np.load(f)) for f in sorted(glob.glob(f"{CANDOR_OUT}/*.npz"))]
+    arr = {k: np.concatenate([p[k] for p in parts]) for k in parts[0]}
+    order = np.argsort(arr["item_id"])
+    arr = {k: v[order] for k, v in arr.items()}
+    if len(order) != n_items or not (arr["item_id"] == np.arange(n_items)).all():
+        return f"incomplete: {len(order)} of {n_items} rows from {len(parts)} files, nothing written"
+    np.savez(out_file, **arr)
+    candor_volume.commit()
+    return f"merged {len(parts)} files: {len(order)} items -> {out_file}"
+
+
 @app.function(image=image, volumes={VOL: volume}, timeout=3600, memory=65536, cpu=4)
 def merge(out_dir: str = "data/b1/feats", out_file: str = "data/b1/feats.npz") -> str:
     import glob
@@ -203,6 +269,12 @@ def main(what: str = "all", max_containers: int = 8, ami_group: int = 6, items: 
     import pyarrow.parquet as pq
     tbl = pq.read_table(items)
     out = []
+    if what == "candor":   # items = the local CANDOR test parquet, uploaded to the candor volume as eot_test/items.parquet
+        convs = sorted(set(tbl["conv"].to_pylist()))
+        out += [str(r) for r in featurize_candor.map([convs[i::8] for i in range(8)], return_exceptions=True)]
+        out.append(merge_candor.remote(tbl.num_rows))
+        print("\n".join(out))
+        return
     if what in ("all", "std") and "shard" in tbl.column_names:
         std = tbl.filter(pc.equal(tbl["source"], "std"))
         shards = sorted(set(std["shard"].to_pylist()))

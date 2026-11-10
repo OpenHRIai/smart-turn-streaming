@@ -50,8 +50,16 @@ class Store:
         z = np.load(feats)
         ids = z["item_id"]
         assert (ids == np.arange(len(ids))).all() and len(ids) == len(self.items), "feats/items misaligned"
-        pooled, mel, pb = z[f"pooled_{backbone}"], z["mel20"], z[f"p_{backbone}"].astype(np.float32)
+        if backbone == "parakeet":
+            # modal_parakeet_features.py: window mean (512) and the last 13 encoder frames (13, 512) in
+            # place of the pooled vector and mel20; the encoder has no P(complete) of its own, so the
+            # report's "base" columns are a constant 0
+            pooled, mel = z["pooled"], z["last"]
+            pb = np.zeros(len(ids), np.float32)
+        else:
+            pooled, mel, pb = z[f"pooled_{backbone}"], z["mel20"], z[f"p_{backbone}"].astype(np.float32)
         if extra_feats:
+            assert backbone != "parakeet", "extra items have no Parakeet features"
             ex = pd.read_parquet(extra_items)
             ze = np.load(extra_feats)
             assert (ze["item_id"] == ex.item_id.values).all() and ex.item_id.min() == len(ids), "extra feats/items misaligned"
@@ -197,7 +205,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--feats", default="data/b1/feats.npz")
     ap.add_argument("--items", default="data/b1/items.parquet")
-    ap.add_argument("--backbone", default="v32", choices=["v32", "mm"])
+    ap.add_argument("--backbone", default="v32", choices=["v32", "mm", "parakeet"])
     ap.add_argument("--sources", default="std,ami")
     ap.add_argument("--no-mel", action="store_true")
     ap.add_argument("--no-tau", action="store_true")
@@ -251,7 +259,9 @@ def main():
         w[m] = share[s] / max(m.sum(), 1)
     w = w / w.sum()
 
-    model = Heads(use_mel=not a.no_mel, use_tau=not a.no_tau, dropout=a.dropout).to(dev)
+    model = Heads(d_pooled=st.pooled.shape[1], d_mel=st.mel.shape[2], use_mel=not a.no_mel, use_tau=not a.no_tau,
+                  dropout=a.dropout).to(dev)
+    print(f"load {time.time() - t0:.0f} s", flush=True)
     print(f"model params {model.n_params():,}")
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=a.wd)
     steps = a.epochs * (len(tr) // a.bs)
@@ -290,6 +300,7 @@ def main():
         log.append(row)
         if wb:
             wb.log({f"dev/{k}": v for k, v in row.items() if k != "epoch"}, step=gstep)
+        row["elapsed_s"] = round(time.time() - t0)
         print(json.dumps({k: (round(v, 4) if isinstance(v, float) else v) for k, v in row.items()}), flush=True)
         if score > best:
             best, best_state, best_epoch = score, {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}, ep + 1
